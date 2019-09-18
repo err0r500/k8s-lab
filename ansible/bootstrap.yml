@@ -1,0 +1,8 @@
+---
+
+- name: install Kubeadm
+  hosts: all
+  become: yes
+  gather_facts: False
+  roles:
+    - common

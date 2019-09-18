@@ -1,0 +1,8 @@
+---
+
+- name: install docker
+  import_tasks: docker.yml
+
+- name: install k8s packages
+  import_tasks: k8s_packages.yml
+

@@ -1,0 +1,6 @@
+networking-cheatsheet.md
+offer.md
+ppt.md
+vagrant/.vagrant/*
+*/*/*.log
+.gitignore.swp

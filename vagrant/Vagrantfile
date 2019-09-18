@@ -1,0 +1,35 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+    vb.customize ["modifyvm", :id, "--audio", "none"]
+  end
+
+  config.vm.define "master" do |c|
+      c.vm.hostname = "master"
+      c.vm.network "private_network", ip: "172.16.0.10"
+      c.vm.provider "virtualbox" do |vb|
+        vb.memory = "2048"
+      end
+
+      c.vm.provision "shell", inline: "swapoff -a", run: "always"
+      c.vm.provision "ansible" do |ansible| 
+        ansible.playbook = "../ansible/bootstrap.yml"
+      end
+  end
+
+  (0..1).each do |n|
+    config.vm.define "worker-#{n}" do |c|
+        c.vm.hostname = "worker-#{n}"
+        c.vm.network "private_network", ip: "172.16.1.1#{n}"
+
+        c.vm.provision "ansible" do |ansible| 
+          ansible.playbook = "../ansible/bootstrap.yml"
+        end
+    end
+  end
+end
